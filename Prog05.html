@@ -18,12 +18,16 @@
 		<h1>Add new input lines to HTML entry form</h1>
 		<button type="button" onclick="addLine();">Add Line</button>
 		<br>
+		<div id="div1"></div>
+		<br>
+		<button type="button" onclick="displayInfo();">Display Info</button>
 		<p id="p1"></p>
 		
 		<h1>Generate array of objects</h1>
 		<button type="button" onclick="genObjectArray();">Generate and Display Array of Objects</button>
 		<br>
 		<p id="p2"></p>
+		<div id="div2"></div>
 		
 		<h1>Display table containing data from array of objects</h1>
 		<button type="button" onclick="genTable();">Generate and Display Table</button>
@@ -31,12 +35,38 @@
 		<div id="d3"></div>
 	</body>
 	<script>
-		function Person(name, street) {
-		  this.name = name;
-		  this.street = street;
-		  this.info = function(){
-			return "My name is " + this.name + ", and I live at " + this.street + ".";
-		  }
+		function Person(name, surname, bday, bmonth, byear, country) {
+			this.name = name;
+			this.surname = surname;
+			this.bday = bday;
+			this.bmonth = bmonth;
+			this.byear = byear;
+			this.country = country;
+			
+			//accessors
+			this.getName = function(){return this.name;}
+			this.getSurname = function(){return this.surname;}
+			this.getBDay = function(){return this.bday;}
+			this.getBMonth = function(){return this.bmonth;}
+			this.getBYear = function(){return this.byear;}
+			this.getCountry = function(){return this.country;}
+			
+			//mutators
+			this.setName = function(name){this.name = name;}
+			this.setSurname = function(surname){this.surname = surname;}
+			this.setBDay = function(bday){this.bday = bday;}
+			this.setBMonth = function(bmonth){this.bmonth = bmonth;}
+			this.setBYear = function(byear){this.byear = byear;}
+			this.setCountry = function(country){this.country = country;}
+			
+			this.info = function(){
+				if (this.getCountry() = "USA"){
+					return "My name is " + this.getName() + ", my surname is " + this.getSurname() + ", my i was born on " + this.getBMonth() + "/" + this.getBDay() + "/" + this.getBYear() + ", and i am from " + this.getCountry() + ".";
+				}else if(this.country = "China"){
+					return "My name is " + this.getName() + ", my surname is " + this.getSurname() + ", my i was born on " + this.getBMonth() + "/" + this.getBDay() + "/" + this.getBYear() + ", and i am from " + this.getCountry() + ".";
+				}
+			}
+			
 		}
 		/*jane = new Person("Jane Doe","1234 Fifth Avenue");	//create new person
 		document.getElementById("p1").innerHTML = jane.info();
@@ -85,6 +115,7 @@
 			var currentLine = 0;
 			var inputWidth  = 10;
 			var objArray    = [];
+			var people	 	= [];
 
 			// FUNCTIONS
 
@@ -97,8 +128,8 @@
 				// create a new form element, and append to div1
 				var newelement = document.createElement("form");
 				newelement.setAttribute("id","form1");
-				var p1 = document.getElementById("p1");
-				p1.appendChild(newelement);
+				var div1 = document.getElementById("div1");
+				div1.appendChild(newelement);
 
 				// create a new fieldset element, and append to form1
 				var newelement = document.createElement("fieldset");
@@ -133,8 +164,6 @@
 				fieldset1.appendChild(newelement);
 
 				// add more fields 
-				
-				jane = new Person("Jane Doe","1234 Fifth Avenue");
 				
 				addField("fieldset1", "sname", "Surname", "text", "Jane Doe", inputWidth);
 				addField("fieldset1", "bday", "Birth Day", "number", "10", inputWidth);
@@ -220,7 +249,27 @@
 					f.appendChild(n);
 				}
 			}
-
+			
+			//displays a sentence about the info inputed from the above form
+			function displayInfo() {	
+				//clears current items to make room for new ones
+				document.getElementById("p1").innerHTML = "";
+				document.getElementById("p2").innerHTML = "";
+				
+				//go through all information and create objects for each one
+				for (i = 0; i < currentLine; i++){
+					var name = document.getElementById("gname" + i);
+					var surname = document.getElementById("sname" + i);
+					var bday = document.getElementById("bday" + i);
+					var bmonth = document.getElementById("bmonth" + i);
+					var byear = document.getElementById("byear" + i);
+					var country = document.getElementById("country" + i);
+					
+					people[i] = new Person(name, surname, bday, bmonth, byear, country);	//create new person
+					document.getElementById("p1").innerHTML += people[i].info();					
+				}
+			}
+			
 			/* genObjectArray()
 			 * generates content for an array of objects, 
 			 * where each element of the array 
@@ -229,23 +278,25 @@
 			function genObjectArray() {
 				// precondition: HTML must contain <div id="div2"> element
 				// precondition: currentLine (global variable) must be set
-
+				
 				// generate objArray from HTML form elements
 				for(i = 0; i < currentLine; i++) {
-					objArray[i] = {
-						'gname'     :document.getElementById("gname"+i).value,
-						'sname'     :document.getElementById("sname"+i).value,
-						'bday'       :parseInt(document.getElementById("bday"+i).value)?parseInt(document.getElementById("bday"+i).value):0, 
-						'bmonth'       :parseInt(document.getElementById("bmonth"+i).value)?parseInt(document.getElementById("bmonth"+i).value):0, 
-						'byear'       :parseInt(document.getElementById("byear"+i).value)?parseInt(document.getElementById("byear"+i).value):0, 
-						'country'   :document.getElementById("country"+i).value,
+					
+					/*objArray[i] = {
+						'gname'     :people[i].getName(),
+						'sname'     :people[i].getSurname(),
+						'bday'      :people[i].getBDay(), 
+						'bmonth'    :people[i].getBMonth(), 
+						'byear'     :people[i].getBYear(), 
+						'country'   :people[i].getCountry(),
 						'countryAge':function () {
 							if('China'==this.country)
 								return parseInt(this.age)+1; 
 							else 
 								return parseInt(this.age);
 							}
-					};
+					};*/
+					document.getElementById("p2").innerHTML = JSON.stringify(people[i]);
 				}
 
 				// display objArray
@@ -257,7 +308,7 @@
 					divContent += '</li>';
 				});
 				divContent += "</ol>";
-				document.getElementById("p2").innerHTML = divContent;
+				document.getElementById("d3").innerHTML = divContent;
 			}
 			
 			//generate initial table elements

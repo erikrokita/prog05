@@ -1,0 +1,60 @@
+<html>
+	<head>
+		<title>prog 5</title>
+	</head>
+	<body>
+		<p id="p1"></p>
+		<p id="p2"></p>
+		<div id="d3"></div>
+	</body>
+	<script>
+		function Person(name, street) {
+		  this.name = name;
+		  this.street = street;
+		  this.info = function(){
+			return "My name is " + this.name + ", and I live at " + this.street + ".";
+		  }
+		}
+		jane = new Person("Jane Doe","1234 Fifth Avenue");
+		document.getElementById("p1").innerHTML = jane.info();
+		document.getElementById("p2").innerHTML = JSON.stringify(jane);
+
+		function Table(thArr, elemId) {
+		  this.thArr = thArr;
+		  this.tbl = null;
+		  this.makeTable = function(){
+			
+			// make/append new table element
+			var el = document.createElement("table");
+			  el.setAttribute("id","table1");
+			el.setAttribute("border","1");
+			  var root = 
+				document.getElementById(elemId);
+			  root.appendChild(el);
+			// make table element the new root
+			root = el;
+			
+			// make/append table row for headers
+			var el = document.createElement("tr");
+			  el.setAttribute("id","headerRow");
+			  root.appendChild(el);
+			// make table row the new root
+			root = el;
+			
+			// make/append table headers
+			for (i=0; i<thArr.length; i++) {
+			  var thElem = 
+				  document.createElement("th");
+				var t = document.createTextNode(thArr[i]);
+				thElem.appendChild(t);
+			  root.appendChild(thElem);
+			}
+
+		  }
+		}
+		thArr = ["name", "street"];
+		tbl = new Table(thArr, "d3");
+		tbl.makeTable();
+
+	</script>
+</html>

@@ -35,7 +35,11 @@
 		<div id="d3"></div>
 	</body>
 	<script>
+		//define people array
+		var people = [];
+		
 		function Person(name, surname, bday, bmonth, byear, country) {
+			
 			this.name = name;
 			this.surname = surname;
 			this.bday = bday;
@@ -60,10 +64,10 @@
 			this.setCountry = function(country){this.country = country;}
 			
 			this.info = function(){
-				if (this.getCountry() = "USA"){
+				if (this.country = "USA"){
 					return "My name is " + this.getName() + ", my surname is " + this.getSurname() + ", my i was born on " + this.getBMonth() + "/" + this.getBDay() + "/" + this.getBYear() + ", and i am from " + this.getCountry() + ".";
 				}else if(this.country = "China"){
-					return "My name is " + this.getName() + ", my surname is " + this.getSurname() + ", my i was born on " + this.getBMonth() + "/" + this.getBDay() + "/" + this.getBYear() + ", and i am from " + this.getCountry() + ".";
+					return "My name is " + this.getName() + ", my surname is " + this.getSurname() + ", my i was born on " + this.getBDay() + "/" + this.getBMonth() + "/" + this.getBYear() + ", and i am from " + this.getCountry() + ".";
 				}
 			}
 			
@@ -75,6 +79,7 @@
 		function Table(thArr, elemId) {	//table class
 		  this.thArr = thArr;
 		  this.tbl = null;
+		  this.thElem;
 		  this.makeTable = function(){
 			
 			// make/append new table element
@@ -96,17 +101,36 @@
 			
 			// make/append table headers
 			for (i=0; i<thArr.length; i++) {
-			  var thElem = 
-				  document.createElement("th");
+				thElem = document.createElement("th");
 				var t = document.createTextNode(thArr[i]);
 				thElem.appendChild(t);
-			  root.appendChild(thElem);
+				root.appendChild(thElem);
+			}
+			
+			//make/append information
+			for (j = 0; j < currentLine; j++){
+				var tdElem = document.createElement("td");
+				var dName = document.createTextNode(people[j].getName());
+				var dsurName = document.createTextNode(people[j].getSurname());
+				var dBDay = document.createTextNode(people[j].getBDay());
+				var dBMonth = document.createTextNode(people[j].getBMonth());
+				var dBYear = document.createTextNode(people[j].getBYear());
+				var dCountry = document.createTextNode(people[j].getCountry());
+				tdElem.appendChild(dName);
+				tdElem.appendChild(dsurName);
+				tdElem.appendChild(dBDay);
+				tdElem.appendChild(dBMonth);
+				tdElem.appendChild(dBYear);
+				tdElem.appendChild(dCountry);
+				root.appendChild(tdElem);
+				thElem.appendChild(tdElem);
+				root.appendChild(tdElem);
 			}
 
 		  }
 		}
-		thArr = ["name", "street"];
-		/*tbl = new Table(thArr, "d3");	//create new table
+		/*thArr = ["name", "surname", "bday", "bday", "bmonth", "byear", "country"];
+		tbl = new Table(thArr, "d3");	//create new table
 		tbl.makeTable();*/
 		
 		//-----DIVIDER-----//
@@ -115,7 +139,6 @@
 			var currentLine = 0;
 			var inputWidth  = 10;
 			var objArray    = [];
-			var people	 	= [];
 
 			// FUNCTIONS
 
@@ -258,12 +281,12 @@
 				
 				//go through all information and create objects for each one
 				for (i = 0; i < currentLine; i++){
-					var name = document.getElementById("gname" + i);
-					var surname = document.getElementById("sname" + i);
-					var bday = document.getElementById("bday" + i);
-					var bmonth = document.getElementById("bmonth" + i);
-					var byear = document.getElementById("byear" + i);
-					var country = document.getElementById("country" + i);
+					var name = document.getElementById("gname" + i).value;
+					var surname = document.getElementById("sname" + i).value;
+					var bday = document.getElementById("bday" + i).value;
+					var bmonth = document.getElementById("bmonth" + i).value;
+					var byear = document.getElementById("byear" + i).value;
+					var country = document.getElementById("country" + i).value;
 					
 					people[i] = new Person(name, surname, bday, bmonth, byear, country);	//create new person
 					document.getElementById("p1").innerHTML += people[i].info();					
@@ -281,21 +304,6 @@
 				
 				// generate objArray from HTML form elements
 				for(i = 0; i < currentLine; i++) {
-					
-					/*objArray[i] = {
-						'gname'     :people[i].getName(),
-						'sname'     :people[i].getSurname(),
-						'bday'      :people[i].getBDay(), 
-						'bmonth'    :people[i].getBMonth(), 
-						'byear'     :people[i].getBYear(), 
-						'country'   :people[i].getCountry(),
-						'countryAge':function () {
-							if('China'==this.country)
-								return parseInt(this.age)+1; 
-							else 
-								return parseInt(this.age);
-							}
-					};*/
 					document.getElementById("p2").innerHTML = JSON.stringify(people[i]);
 				}
 
@@ -311,60 +319,16 @@
 				document.getElementById("d3").innerHTML = divContent;
 			}
 			
-			//generate initial table elements
-				var tab = document.createElement("table");
-				tab.setAttribute("border", "1");
-				greg = document.getElementById("p3");
-				var tbod = document.createElement("tbody");
-				tab.appendChild(tbod);
-				var tr = document.createElement("tr");
-				tbod.appendChild(tr);
-				//table head
-				var th = document.createElement("th");
-				th.innerHTML = "Local Name";
-				tr.appendChild(th);
-				var th2 = document.createElement("th");
-				th2.innerHTML = "Local DOB";
-				tr.appendChild(th2);
-				var th3 = document.createElement("th");
-				th3.innerHTML = "Local Age";
-				tr.appendChild(th3);
-				var th4 = document.createElement("th");
-				th4.innerHTML = "Local Zodiac";
-				tr.appendChild(th4);
-			
-				greg.appendChild(tab);
-			
 			/* genTable()
 			 * generates an HTML table containing localized output from 
 			 */
 			 function genTable(){
 				
-				//table data
-				for(i = 0; i < currentLine; i++) {
-					var trD = document.createElement("tr");
-					tbod.appendChild(trD);
-					var tdD = document.createElement("td");
-					tdD.innerHTML = document.getElementById("gname" + i).value + " " + document.getElementById("sname" + i).value;
-					trD.appendChild(tdD);
-					var tdD2 = document.createElement("td");
-					if (document.getElementById("country" + i).value == "USA"){
-						tdD2.innerHTML = document.getElementById("bmonth" + i).value + "/" + document.getElementById("bday" + i).value + "/" + document.getElementById("byear" + i).value;
-					}else if (document.getElementById("country" + i).value == "China"){
-						tdD2.innerHTML = document.getElementById("byear" + i).value + "/" + document.getElementById("bmonth" + i).value + "/" + document.getElementById("bday" + i).value;
-					}
-					trD.appendChild(tdD2);
-					var tdD3 = document.createElement("td");
-					//tdD3.innerHTML = countryAge();
-					trD.appendChild(tdD3);
-					var tdD4 = document.createElement("td");
-					if (document.getElementById("country" + i).value == "China"){
-						tdD4.innerHTML = "Chinese";
-					}else if (document.getElementById("country" + i).value == "USA"){
-						tdD4.innerHTML = "Western";
-					}
-					trD.appendChild(tdD4);	
-				}
+				thArr = ["name", "surname", "bday", "bmonth", "byear", "country"];
+				tbl = new Table(thArr, "d3");	//create new table
+				tbl.makeTable();
 			 }
+			 
+			 
 		</script>
 </html>

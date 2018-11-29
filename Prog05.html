@@ -64,9 +64,9 @@
 			this.setCountry = function(country){this.country = country;}
 			
 			this.info = function(){
-				if (this.country = "USA"){
+				if (this.country == "USA"){
 					return "My name is " + this.getName() + ", my surname is " + this.getSurname() + ", my i was born on " + this.getBMonth() + "/" + this.getBDay() + "/" + this.getBYear() + ", and i am from " + this.getCountry() + ".";
-				}else if(this.country = "China"){
+				}else if(this.country == "China"){
 					return "My name is " + this.getName() + ", my surname is " + this.getSurname() + ", my i was born on " + this.getBDay() + "/" + this.getBMonth() + "/" + this.getBYear() + ", and i am from " + this.getCountry() + ".";
 				}
 			}

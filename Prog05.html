@@ -79,7 +79,7 @@
 		function Table(thArr, elemId) {	//table class
 		  this.thArr = thArr;
 		  this.tbl = null;
-		  this.thElem;
+		  this.personArray = [];
 		  this.makeTable = function(){
 			
 			// make/append new table element
@@ -101,30 +101,33 @@
 			
 			// make/append table headers
 			for (i=0; i<thArr.length; i++) {
-				thElem = document.createElement("th");
+				var thElem = document.createElement("th");
 				var t = document.createTextNode(thArr[i]);
 				thElem.appendChild(t);
 				root.appendChild(thElem);
 			}
 			
-			//make/append information
 			for (j = 0; j < currentLine; j++){
-				var tdElem = document.createElement("td");
-				var dName = document.createTextNode(people[j].getName());
-				var dsurName = document.createTextNode(people[j].getSurname());
-				var dBDay = document.createTextNode(people[j].getBDay());
-				var dBMonth = document.createTextNode(people[j].getBMonth());
-				var dBYear = document.createTextNode(people[j].getBYear());
-				var dCountry = document.createTextNode(people[j].getCountry());
-				tdElem.appendChild(dName);
-				tdElem.appendChild(dsurName);
-				tdElem.appendChild(dBDay);
-				tdElem.appendChild(dBMonth);
-				tdElem.appendChild(dBYear);
-				tdElem.appendChild(dCountry);
-				root.appendChild(tdElem);
-				thElem.appendChild(tdElem);
-				root.appendChild(tdElem);
+				//set root to table
+				var el = document.getElementById("table1");
+				root = el;
+				
+				//populate personArray with information
+				personArray = [people[j].getName(), people[j].getSurname(), people[j].getBDay(), people[j].getBMonth(), people[j].getBYear(), people[j].getCountry()]
+				
+				// make/append table row for data
+				var el = document.createElement("tr");
+				el.setAttribute("id","dataRow" + j);
+				root.appendChild(el);
+				// make table row the new root
+				root = el;
+				
+				for (i = 0; i < thArr.length; i++){
+					var tdElem = document.createElement("td");
+					var d = document.createTextNode(personArray[i]);
+					tdElem.appendChild(d);
+					root.appendChild(tdElem);
+				}
 			}
 
 		  }
@@ -289,7 +292,7 @@
 					var country = document.getElementById("country" + i).value;
 					
 					people[i] = new Person(name, surname, bday, bmonth, byear, country);	//create new person
-					document.getElementById("p1").innerHTML += people[i].info();					
+					document.getElementById("p1").innerHTML += people[i].info() + "\n";					
 				}
 			}
 			
@@ -304,7 +307,7 @@
 				
 				// generate objArray from HTML form elements
 				for(i = 0; i < currentLine; i++) {
-					document.getElementById("p2").innerHTML = JSON.stringify(people[i]);
+					document.getElementById("p2").innerHTML += JSON.stringify(people[i]) + "\n";
 				}
 
 				// display objArray
